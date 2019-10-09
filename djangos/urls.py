@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('elections/',include('elections.urls')),
     path('video/',include('video.urls')),
+    path('opencvwebapp/',include('opencvwebapp.urls')),
     path('',views.index),
 ]
