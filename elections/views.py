@@ -62,8 +62,11 @@ def result(request,area): #
 
         rates = []
         for candidate in candidates:
-            choice = Choice.objects.get(candidate_id = candidate.id,poll_id = poll.id)
-            rates.append(   round( choice.votes * 100 / poll_row['total_votes'] ,3))
+            try:
+                choice = Choice.objects.get(candidate_id = candidate.id,poll_id = poll.id)
+                rates.append(   round( choice.votes * 100 / poll_row['total_votes'] ,3))
+            except:
+                rates.append(0)
         poll_row['rates'] = rates
         poll_rows.append(poll_row)
     # 지역 데이터를 받아서 -> 그 지역에 해당하는 후보들 /
