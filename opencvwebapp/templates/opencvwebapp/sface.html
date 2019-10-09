@@ -14,10 +14,16 @@
   </form>
 
   {% if post %}
-  <div>
+    <div>
         <video src = "{{ post.document.url }}" autoplay controls></video>
     </div>
   <p>File uploaded at: <a href="{{ post.document.url }}">{{ post.document }}</a></p>
+
+   <div>
+        <video src = "{{ saved_name }}" autoplay controls></video>
+    </div>
+  <p>output File uploaded at: <a href="{{ saved_name }}">{{ saved_name }}</a></p>
+
   {% endif %}
 
 

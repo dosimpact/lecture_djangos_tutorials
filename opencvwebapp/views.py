@@ -12,6 +12,10 @@ from .opencv_sface import opencv_sface
 import cv2
 import numpy as np
 
+from multiprocessing import Process
+import os
+import ntpath
+
 def index(request):
     if request.method == 'POST':
         profileform = ProfileUploadForm(request.POST,request.FILES)
@@ -93,11 +97,22 @@ def sface(request):
             post = form.save(commit=False)
             post.save()
             fileURL = settings.MEDIA_URL + form.instance.document.name #name-> 경로+파일명이 나오네..
-            print("####### File URL -> ",fileURL,' form.instance.document.name ',form.instance.document.name)
-            #이 부분을 서브 프로세서로 해야될듯..
-            #opencv_sface(settings.MEDIA_ROOT_URL + fileURL)
+            print("####### File URL -> ",fileURL,' form.instance.document.name -> ',form.instance.document.name)
 
-            return render(request, 'opencvwebapp/sface.html', {'form': form, 'post': post})
+            filename, file_extension = os.path.splitext(fileURL) # '/path/to/somefile.ext' -> '/path/to/somefile' '.ext'
+            saved_name = ntpath.basename(filename+"_result"+file_extension) #'/path/to/somefile.ext' -> somefile.ext
+            print('######## saved_name -> : ',saved_name)
+
+            #이 부분을 서브 프로세서로 해야될듯..
+            procs = []
+            #Process01
+            proc = Process(target=opencv_sface, args=(settings.MEDIA_ROOT_URL + fileURL,))
+            proc.start()
+            procs.append(proc)
+            #for pr in procs:
+            #    pr.join()
+            
+            return render(request, 'opencvwebapp/sface.html', {'form': form, 'post': post,'saved_name':saved_name,})
     else:
         form = FileUploadForm()
     return render(request, 'opencvwebapp/sface.html', {'form': form})

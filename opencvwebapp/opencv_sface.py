@@ -4,10 +4,9 @@ from django.conf import settings
 import os
 import ntpath
 
-#경로 전달 - 이미지 읽기
 
 def opencv_sface(path):
-    
+    print('########sface process is started !!')
     filename, file_extension = os.path.splitext(path) # '/path/to/somefile.ext' -> '/path/to/somefile' '.ext'
     saved_name = ntpath.basename(filename+"_result"+file_extension) #'/path/to/somefile.ext' -> somefile.ext
     print('######## saved_name : ',saved_name)
@@ -35,6 +34,7 @@ def opencv_sface(path):
         pMOG2.apply(img_color) 
         #cv2.imshow("Fianlly",img_color)
         writer.write(backgroundImage)
+    print('########sface process is Ended !!')
     
 """
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
