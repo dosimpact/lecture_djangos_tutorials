@@ -1,0 +1,40 @@
+{% extends "elections/layout.html" %}
+
+{% block title %}
+지역구 : {{ area }} 여론조사.
+{% endblock %}
+
+{% block content%}
+<div class="container">
+    {% if poll %}
+    <table class="table table-striped">
+        
+        <thead>
+        <tr>
+            <td><B>이름</B></td>
+            <td><B>기호</B></td>
+            <td><B>자기소개</B></td>
+            <td><B>선택</B></td>
+        </tr>
+        </thead>
+        <!-- 이 부분이 바뀌었습니다 -->
+        <tbody>
+            {% for candidate in candidates %}
+            <tr>
+                <td>{{candidate.name}}</td>
+                <td>{{candidate.party_number}}</td>
+                <td>{{candidate.introduction}}</a></td>
+                <td>
+                    <form action ="choice/{{poll.id}}" method = "post">
+                        {% csrf_token %}
+                        <button name = "choice" value = "{{candidate.id}}">선택하기</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        <tbody>
+    </table>
+    {% else %}
+    <h1>현재 진행중인 여론조사가 없습니다. </h1>
+    {% endif %}
+{% endblock %}

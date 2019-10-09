@@ -1,0 +1,31 @@
+{% extends "elections/layout.html" %}
+{% block title %}
+{{area}} 여론조사 결과
+{% endblock %}
+
+{% block content%}
+<!--    return render(request,'elections/result.html',context = {'area':area,'candidates':candidates,'poll_rows':poll_rows}) -->
+<div class="container">
+    <h1>{{area}} 여론조사 결과</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td><B>이름</B></td>
+            {% for candidate in candidates %}
+            <td><B>{{candidate.name}}</B></td>
+            {% endfor %}
+        </tr>
+        </thead>
+        <!-- 이 부분이 바뀌었습니다 -->
+        {% for poll_row in poll_rows %}
+        <tr>
+            <td><b>{{poll_row.start_date}}~{{poll_row.end_date}}</b></td>
+            {% for rate in poll_row.rates %}
+            <td><b> {{rate}}% </b></td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        <tbody>
+        <tbody>
+    </table>
+{% endblock %}

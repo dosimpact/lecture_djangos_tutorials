@@ -15,8 +15,14 @@ class Poll(models.Model):
     end_date = models.DateTimeField()
     area = models.CharField(max_length = 10)
 
+    def __str__(self):
+        return " 미국 "+str(self.start_date)+" ~ "+str(self.end_date)
+
 class Choice(models.Model):
     candidate = models.ForeignKey(Candidate,models.CASCADE)
     poll = models.ForeignKey(Poll,models.CASCADE)
     votes = models.IntegerField(default = 0)
+
+    def __str__(self):
+        return str(self.candidate)+" = " + str(self.votes)
 
