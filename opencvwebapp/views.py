@@ -5,11 +5,18 @@ from django.shortcuts import redirect
 from django.conf import settings
 
 from .models import ImageUploadModel
-from .forms import UploadImageForm,ImageUploadForm
+from .forms import UploadImageForm,ImageUploadForm,ProfileUploadForm
 from .opencv_dface import opencv_dface
 
 def index(request):
-    return HttpResponse("opencv")
+    if request.method == 'POST':
+        profileform = ProfileUploadForm(request.POST,request.FILES)
+        if profileform.is_valid():
+            profileform.save()
+            return HttpResponse('OK!')
+    else:
+        profileform = ProfileUploadForm()
+    return render(request,'opencvwebapp/index.html',{'profileform':profileform} )
 
 def uimage(request):
     if request.method == 'POST':

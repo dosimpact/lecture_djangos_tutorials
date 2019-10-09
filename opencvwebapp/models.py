@@ -18,3 +18,9 @@ from django.dispatch.dispatcher import receiver
 def mymodel_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.document.delete(False)
+
+class Profile(models.Model):
+    name = models.CharField(max_length = 10)
+    image  = models.ImageField(blank = True, null = True)
+    def __str__(self):
+        return self.name
