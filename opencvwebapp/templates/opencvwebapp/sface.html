@@ -1,15 +1,27 @@
-{% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>video streaming example</h1>
-<video src = '{% static "opencvwebapp/Car.mp4"%}'></video>
-<img src= '{% static "opencvwebapp/Suzy.jpg" %}' alt="My image">
+ <html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+ </head>
+ <body>
+        <h1>File IO example</h1>
+<!-- image upload start-->
+  <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Upload</button>
+  </form>
+
+  {% if post %}
+  <div>
+        <video src = "{{ post.document.url }}" autoplay controls></video>
+    </div>
+  <p>File uploaded at: <a href="{{ post.document.url }}">{{ post.document }}</a></p>
+  {% endif %}
+
+
+<!-- image upload end -->
 
 </body>
 </html>
