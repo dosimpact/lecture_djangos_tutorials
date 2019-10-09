@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,StreamingHttpResponse
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from django.conf import settings
@@ -7,6 +7,9 @@ from django.conf import settings
 from .models import ImageUploadModel
 from .forms import UploadImageForm,ImageUploadForm,ProfileUploadForm
 from .opencv_dface import opencv_dface
+
+import cv2
+import numpy as np
 
 def index(request):
     if request.method == 'POST':
@@ -18,6 +21,34 @@ def index(request):
         profileform = ProfileUploadForm()
     return render(request,'opencvwebapp/index.html',{'profileform':profileform} )
 
+def capture_video_from_cam():
+    fs = FileSystemStorage()
+    uploaded_file_url = fs.url('Car.mp4')
+    print("##########",uploaded_file_url)
+    cap = cv2.VideoCapture(uploaded_file_url)
+    currentFrame = 0
+    while True:
+
+        ret, frame = cap.read()
+
+        # Handles the mirroring of the current frame
+        frame = cv2.flip(frame,1)
+        currentFrame += 1
+
+def show_video_on_page(request):
+    resp = StreamingHttpResponse(capture_video_from_cam())
+    return render(request, 'opencvwebapp/sface.html', {'video': resp})
+    
+def strem_file(request, *args, **kwargs):
+    r = requests.get("http://host.com/file.txt", stream=True)
+
+    resp = StreamingHttpResponse(streaming_content=r.raw)
+
+    # In case you want to force file download in a browser 
+    # resp['Content-Disposition'] = 'attachment; filename="saving-file-name.txt"'
+
+    return resp
+
 def uimage(request):
     if request.method == 'POST':
         form = UploadImageForm(request.POST, request.FILES)
@@ -26,7 +57,7 @@ def uimage(request):
             fs = FileSystemStorage()
             filename = fs.save(myfile.name, myfile)
             uploaded_file_url = fs.url(filename)
-            print('############',uploaded_file_url)
+            print('############',filename," -> ",uploaded_file_url)
             return render(request, 'opencvwebapp/uimage.html', {'form': form, 'uploaded_file_url': uploaded_file_url})
 
     else:

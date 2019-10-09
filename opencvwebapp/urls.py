@@ -7,4 +7,5 @@ urlpatterns = [
     path('',views.index,name = 'main'),
     path('uimage/',views.uimage,name = 'uimage'),
     path('dface/',views.dface,name = 'dface'),
+    path('sface/',views.show_video_on_page,name = 'sface'),
 ]
