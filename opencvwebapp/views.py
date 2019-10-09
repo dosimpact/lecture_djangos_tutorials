@@ -4,9 +4,10 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect
 from django.conf import settings
 
-from .models import ImageUploadModel
-from .forms import UploadImageForm,ImageUploadForm,ProfileUploadForm
+from .models import ImageUploadModel,FileUploadModel
+from .forms import UploadImageForm,ImageUploadForm,ProfileUploadForm,FileUploadForm
 from .opencv_dface import opencv_dface
+from .opencv_sface import opencv_sface
 
 import cv2
 import numpy as np
@@ -38,7 +39,7 @@ def capture_video_from_cam():
 def show_video_on_page(request):
     resp = StreamingHttpResponse(capture_video_from_cam())
     return render(request, 'opencvwebapp/sface.html', {'video': resp})
-    
+
 def strem_file(request, *args, **kwargs):
     r = requests.get("http://host.com/file.txt", stream=True)
 
@@ -76,11 +77,26 @@ def dface(request):
                 obs = ImageUploadModel.objects.all().first()
                 if obs:
                     obs.delete()
-
-            imageURL = settings.MEDIA_URL + form.instance.document.name
+            imageURL = settings.MEDIA_URL + form.instance.document.name #name-> 경로+파일명이 나오네..
+            print("####### imageURL -> ",imageURL,' form.instance.document.name ',form.instance.document.name)
             opencv_dface(settings.MEDIA_ROOT_URL + imageURL)
 
             return render(request, 'opencvwebapp/dface.html', {'form': form, 'post': post})
     else:
         form = ImageUploadForm()
     return render(request, 'opencvwebapp/dface.html', {'form': form})
+
+def sface(request):
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            fileURL = settings.MEDIA_URL + form.instance.document.name #name-> 경로+파일명이 나오네..
+            print("####### imageURL -> ",fileURL,' form.instance.document.name ',form.instance.document.name)
+            opencv_sface(settings.MEDIA_ROOT_URL + fileURL)
+
+            return render(request, 'opencvwebapp/sface.html', {'form': form, 'post': post})
+    else:
+        form = ImageUploadForm()
+    return render(request, 'opencvwebapp/sface.html', {'form': form})

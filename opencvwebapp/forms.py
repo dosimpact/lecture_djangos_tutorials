@@ -1,5 +1,5 @@
 from django import forms
-from .models import ImageUploadModel,Profile
+from .models import ImageUploadModel,Profile, FileUploadModel
 
 
 class UploadImageForm(forms.Form):
@@ -9,6 +9,11 @@ class UploadImageForm(forms.Form):
 class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = ImageUploadModel
+        fields = ('description', 'document' )
+
+class FileUploadForm(forms.ModelForm):
+    class Meta:
+        model = FileUploadModel
         fields = ('description', 'document' )
 
 class ProfileUploadForm(forms.ModelForm):

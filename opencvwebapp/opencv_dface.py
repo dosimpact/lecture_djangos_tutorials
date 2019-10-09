@@ -2,13 +2,12 @@ from django.conf import settings
 import numpy as np
 import cv2
 
-
+#경로 전달 - 이미지 읽기
 def opencv_dface(path):
+    
     img = cv2.imread(path, 1)
-
     if (type(img) is np.ndarray):
         print(img.shape)
-
         factor = 1
         if img.shape[1] > 640:
             factor = 640.0 / img.shape[1]
@@ -19,11 +18,10 @@ def opencv_dface(path):
             w = img.shape[1] * factor
             h = img.shape[0] * factor
             img = cv2.resize(img, (int(w), int(h)))
-
+        #정적 파일들을 한곳에 모아두는 MEDIA에서 학습된 데이터를 불러온다.
         baseUrl = settings.MEDIA_ROOT_URL + settings.MEDIA_URL
         face_cascade = cv2.CascadeClassifier(baseUrl + 'haarcascade_frontalface_default.xml')
         eye_cascade = cv2.CascadeClassifier(baseUrl + 'haarcascade_eye.xml')
-
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
@@ -34,7 +32,8 @@ def opencv_dface(path):
             eyes = eye_cascade.detectMultiScale(roi_gray)
             for (ex, ey, ew, eh) in eyes:
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
-
+        #다시 이미지를 저장..
+        print('######## image is wirted --> ', path)
         cv2.imwrite(path, img)
 
     else:
