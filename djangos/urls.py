@@ -19,5 +19,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('elections/',include('elections.urls')),
+    path('video/',include('video.urls')),
     path('',views.index),
 ]

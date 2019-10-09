@@ -55,9 +55,16 @@
 - git remote add origin https://github.com/DosImpact/djangos.git : 처음 한번만 등록을 하면 된다.
 - git remote show origin : 리모트 현황 보기
 - git push origin master : push하자 origin으로 master 브랜치를.
+<br>
+
 3. 협업하기
+- git clone https://github.com/DosImpact/djangos.git : 처음 한번 땡겨오고 master 브런치가 생기면
+- git pull : 그 다음부터는 pull로 동기화만 해주면 된다.
 
 ### x. 참고사항
 
 pip freeze > requirements.txt : 요구되는 패키지 리스트 추출
 pip install -r requirements.txt : 해당 리스트 패키지 설치하기.
+
+### x. 참조 사이트
+[MDB Docs ~ ](https://mdbootstrap.com/docs/jquery/css/animations/)
