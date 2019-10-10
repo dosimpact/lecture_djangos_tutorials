@@ -96,23 +96,31 @@ def sface(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            fileURL = settings.MEDIA_URL + form.instance.document.name #name-> 경로+파일명이 나오네..
+            fileURL = settings.MEDIA_ROOT_URL + settings.MEDIA_URL + form.instance.document.name #name-> 경로+파일명이 나오네..
             print("####### File URL -> ",fileURL,' form.instance.document.name -> ',form.instance.document.name)
 
+            #저장 경로 처리
             filename, file_extension = os.path.splitext(fileURL) # '/path/to/somefile.ext' -> '/path/to/somefile' '.ext'
+            saved_path = filename+"_result"+file_extension
             saved_name = ntpath.basename(filename+"_result"+file_extension) #'/path/to/somefile.ext' -> somefile.ext
-            print('######## saved_name -> : ',saved_name)
+            print('######## saved_name -> : ',saved_name,'saved_path -> : ',saved_path)
+
+            #html 저장경로 처리
+            filename_html, file_extension_html = os.path.splitext( settings.MEDIA_URL + form.instance.document.name )
+            saved_path_html = filename_html+"_result"+file_extension_html
+            saved_name_html = ntpath.basename(filename+"_result"+file_extension) #'/path/to/somefile.ext' -> somefile.ext
+            print('######## saved_name_html -> : ',saved_name_html,'saved_path -> : ',saved_path_html)
 
             #이 부분을 서브 프로세서로 해야될듯..
             procs = []
             #Process01
-            proc = Process(target=opencv_sface, args=(settings.MEDIA_ROOT_URL + fileURL,))
+            proc = Process(target=opencv_sface, args=(fileURL,saved_path,))
             proc.start()
             procs.append(proc)
             #for pr in procs:
             #    pr.join()
             
-            return render(request, 'opencvwebapp/sface.html', {'form': form, 'post': post,'saved_name':saved_name,})
+            return render(request, 'opencvwebapp/sface.html', {'form': form, 'post': post,'saved_path_html':saved_path_html,})
     else:
         form = FileUploadForm()
     return render(request, 'opencvwebapp/sface.html', {'form': form})

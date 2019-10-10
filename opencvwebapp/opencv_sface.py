@@ -5,14 +5,12 @@ import os
 import ntpath
 
 
-def opencv_sface(path):
-    print('########sface process is started !!')
-    filename, file_extension = os.path.splitext(path) # '/path/to/somefile.ext' -> '/path/to/somefile' '.ext'
-    saved_name = ntpath.basename(filename+"_result"+file_extension) #'/path/to/somefile.ext' -> somefile.ext
-    print('######## saved_name : ',saved_name)
+def opencv_sface(path,saved_path):
+
+    print('######## sface process is started !! path -> ',path,'saved_path',saved_path)
 
     capture = cv2.VideoCapture(path)
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    fourcc = cv2.VideoWriter_fourcc(*'MP4V') #(*'MP4V')
 
     fps = int(capture.get(cv2.CAP_PROP_FPS))
     full_frame = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -23,7 +21,7 @@ def opencv_sface(path):
     print(fps,full_frame,frame_width,frame_height,length)
     #vfourcc = int(capture.get(cv2.CAP_PROP_FOURCC))
 
-    writer = cv2.VideoWriter(saved_name, fourcc, fps, (frame_width, frame_height))
+    writer = cv2.VideoWriter(saved_path, fourcc, fps, (frame_width, frame_height))
     pMOG2 = cv2.createBackgroundSubtractorMOG2(40,40,False)
     
     while (int(capture.get(1)) < full_frame):
