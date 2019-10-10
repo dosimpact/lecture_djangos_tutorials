@@ -69,6 +69,9 @@
 pip freeze > requirements.txt : 요구되는 패키지 리스트 추출
 pip install -r requirements.txt : 해당 리스트 패키지 설치하기.
 
+DateBase : git clone 후 마이그레이션 꼭 하기, 그리고 DB에 쌓인 정보가 초기화 되므로.
+media파일 관리도 처음부터 해야된다.(media 및 static은 파일 백업을 해 둘 것인데.. DB연동은 안됨.)
+
 ### x. 참조 사이트
 장고 공식 문서를 하나씩 읽어가며 익히여랴 . Course Extends가 된다. 책,강의는 한계가 있음...
 [Django Docs!](https://docs.djangoproject.com/ko/2.0/howto/static-files/)
